@@ -16,6 +16,8 @@ Y se maneja arquitectura limpia ya facilita futuras actualizacione y mantener me
 # Recursos usados
 
 - El [icono](https://www.flaticon.com/free-icon/speak_1653630) es de Flaticon
+- El diseño del auth es del usuario [syedhaqil](https://dribbble.com/shots/12207505-Babble-Sign-in-Sign-up-UI/attachments/)
+- El diseño general es del usuario [Abdullah](https://dribbble.com/shots/14582907-Freedom-Chatting-App)
 
 # Librerias usadas
 

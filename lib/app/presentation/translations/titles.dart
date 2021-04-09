@@ -1,6 +1,16 @@
 class TitlesTranslations {
-  Map<String, String> get es => {};
+  Map<String, String> get es => {
+        "welcome": "Bienvenido de vuelta",
+        "sign_up": "Registro",
+        "sign_in": "Iniciar Sesion",
+        "forgot_password": "Recuperar Contrasena",
+      };
 
   //
-  Map<String, String> get en => {};
+  Map<String, String> get en => {
+        "welcome": "Welcome Back",
+        "sign_up": "Sign Up",
+        "sign_in": "Sign In",
+        "forgot_password": "Forgot Password",
+      };
 }

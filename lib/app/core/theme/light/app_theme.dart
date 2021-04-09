@@ -7,5 +7,6 @@ ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
   fontFamily: "Poppins",
   accentColor: ConstantsTheme.accentColor,
+  backgroundColor: ConstantsTheme.pureWitheColor,
   textTheme: textTheme,
 );
