@@ -1,4 +1,4 @@
-package com.example.testquick
+package com.christian.testquick
 
 import io.flutter.embedding.android.FlutterActivity
 

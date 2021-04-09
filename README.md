@@ -1,16 +1,25 @@
-# testquick
+# Test Quick
 
-A new Flutter project.
+Prueba para la empresa Quick hecha en Flutter con [arquitectura limpia](https://www.youtube.com/playlist?list=PLB6lc7nQ1n4iYGE_khpXRdJkJEp9WOech).
+Es un chat realizado en Firebase, con funcionalidades como:
+- SignUp & SignIn
+- Editar perfil
+- Chat en tiempo real con emoticones
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+Escogi el manejador de estados GetX ya que tiene una sintaxis facil, ademas de que separa la logica de la vista.
+Tambien tiene algunas utilidades como el manejo de temas, internacionalización, snackbars, que ayudan en el desarrollo de la app.
 
-A few resources to get you started if this is your first Flutter project:
+Y se maneja arquitectura limpia ya facilita futuras actualizacione y mantener mejor la app.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Recursos usados
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- El [icono](https://www.flaticon.com/free-icon/speak_1653630) es de Flaticon
+
+# Librerias usadas
+
+- [GetX](https://pub.dev/packages/get)
+- [Flutter Native Splash](https://pub.dev/packages/flutter_native_splash)
+- [Flutter Launcher Icons](https://pub.dev/packages/flutter_launcher_icons)
+
