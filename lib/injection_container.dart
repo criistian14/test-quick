@@ -7,6 +7,7 @@ import 'app/core/utils/network_info.dart';
 import 'app/data/datasources/remote/auth_remote_data_source.dart';
 import 'app/data/repositories/auth_repository_impl.dart';
 import 'app/domain/repositories/auth_repository.dart';
+import 'app/domain/usecases/is_authenticated.dart';
 import 'app/domain/usecases/sign_in_email_password.dart';
 
 final sl = GetIt.instance;
@@ -36,6 +37,9 @@ void _initUseCases() {
   // * Auth
   sl.registerLazySingleton(
     () => SignInEmailPassword(repository: sl()),
+  );
+  sl.registerLazySingleton(
+    () => IsAuthenticated(repository: sl()),
   );
 }
 

@@ -5,4 +5,7 @@ import 'package:testquick/app/domain/entities/user.dart';
 abstract class AuthRepository {
   // Sign in with email and password user
   Future<Either<Failure, User>> signInWithEmail(User user);
+
+  // Check if it is authenticated
+  Future<Either<Failure, bool>> checkIsAuthenticated();
 }

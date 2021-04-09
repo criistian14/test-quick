@@ -29,4 +29,18 @@ class AuthRepositoryImpl extends AuthRepository {
       ));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> checkIsAuthenticated() async {
+    try {
+      final isAuth = await remoteDataSource.checkIsAuthenticated();
+
+      return Right(isAuth);
+    } on ApiException catch (e) {
+      return Left(ServerFailure(
+        error: e.error,
+        code: e.code,
+      ));
+    }
+  }
 }
