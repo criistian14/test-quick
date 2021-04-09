@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:testquick/app/presentation/pages/home/home_binding.dart';
 import 'package:testquick/app/presentation/pages/home/home_page.dart';
+import 'package:testquick/app/presentation/pages/sign_in/sign_in_binding.dart';
+import 'package:testquick/app/presentation/pages/sign_in/sign_in_page.dart';
 import 'package:testquick/app/presentation/pages/splash/splash_binding.dart';
 import 'package:testquick/app/presentation/pages/splash/splash_page.dart';
 
@@ -17,6 +19,11 @@ class AppPages {
       name: AppRoutes.HOME,
       page: () => HomePage(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.SIGN_IN,
+      page: () => SignInPage(),
+      binding: SignInBinding(),
     ),
   ];
 }

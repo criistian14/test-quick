@@ -7,10 +7,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      builder: (_) => Scaffold(
+      builder: (homeCtrl) => Scaffold(
         body: Center(
-          child: Image.asset(
-            "assets/images/logo.png",
+          child: ElevatedButton(
+            onPressed: homeCtrl.signOut,
+            child: Text("sign_out".tr),
           ),
         ),
       ),
