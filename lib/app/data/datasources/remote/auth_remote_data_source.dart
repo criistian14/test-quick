@@ -16,6 +16,11 @@ abstract class AuthRemoteDataSource {
   ///
   /// Throws a [ServerFailure] for all error codes.
   Future<bool> checkIsAuthenticated();
+
+  /// Calls the TestQuick api to Firebase, signOut()
+  ///
+  /// Throws a [ServerFailure] for all error codes.
+  Future<void> signOut();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -81,5 +86,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
 
     return false;
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await firebaseAuthProvider.signOut();
+    } catch (e) {
+      throw ApiException(
+        error: e.toString(),
+      );
+    }
   }
 }

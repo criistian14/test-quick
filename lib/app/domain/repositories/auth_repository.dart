@@ -8,4 +8,7 @@ abstract class AuthRepository {
 
   // Check if it is authenticated
   Future<Either<Failure, bool>> checkIsAuthenticated();
+
+  // Sign Out
+  Future<Either<Failure, void>> signOut();
 }

@@ -9,6 +9,7 @@ import 'app/data/repositories/auth_repository_impl.dart';
 import 'app/domain/repositories/auth_repository.dart';
 import 'app/domain/usecases/is_authenticated.dart';
 import 'app/domain/usecases/sign_in_email_password.dart';
+import 'app/domain/usecases/sign_out.dart';
 
 final sl = GetIt.instance;
 
@@ -40,6 +41,9 @@ void _initUseCases() {
   );
   sl.registerLazySingleton(
     () => IsAuthenticated(repository: sl()),
+  );
+  sl.registerLazySingleton(
+    () => SignOut(repository: sl()),
   );
 }
 

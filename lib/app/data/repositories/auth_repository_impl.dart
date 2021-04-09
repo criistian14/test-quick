@@ -43,4 +43,18 @@ class AuthRepositoryImpl extends AuthRepository {
       ));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> signOut() async {
+    try {
+      await remoteDataSource.signOut();
+
+      return Right(null);
+    } on ApiException catch (e) {
+      return Left(ServerFailure(
+        error: e.error,
+        code: e.code,
+      ));
+    }
+  }
 }
