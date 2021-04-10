@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       designSize: Size(375, 812),
       allowFontScaling: true,
       builder: () => GetMaterialApp(
-        title: 'Test Quick SAS',
+        title: 'TestQuick SAS',
         debugShowCheckedModeBanner: false,
         theme: appTheme,
         darkTheme: darkTheme,

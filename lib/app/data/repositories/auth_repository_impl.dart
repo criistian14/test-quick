@@ -7,7 +7,7 @@ import 'package:testquick/app/data/datasources/remote/auth_remote_data_source.da
 import 'package:testquick/app/domain/entities/user.dart';
 import 'package:testquick/app/domain/repositories/auth_repository.dart';
 
-class AuthRepositoryImpl extends AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 

@@ -18,7 +18,7 @@ TextTheme textTheme = TextTheme(
   ),
   headline6: TextStyle(),
   bodyText1: TextStyle(
-    fontWeight: FontWeight.w500,
+    color: Colors.blueGrey,
   ),
   bodyText2: TextStyle(),
 );

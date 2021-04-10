@@ -51,6 +51,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (!userFireStore.exists) {
         throw FirebaseAuthException(code: "user-not-found");
       }
+
+      UserModel userFound = UserModel.fromJson(userFireStore.data());
+      userFound = userFound.copyWith(
+        uid: userCredential.user.uid,
+      );
+
+      return userFound;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw ApiException(
@@ -70,13 +77,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         error: e.toString(),
       );
     }
-
-    UserModel userFound = UserModel.fromJson(userFireStore.data());
-    userFound = userFound.copyWith(
-      uid: userCredential.user.uid,
-    );
-
-    return userFound;
   }
 
   @override

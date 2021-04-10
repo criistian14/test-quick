@@ -5,6 +5,8 @@ class TitlesTranslations {
         "sign_in": "Iniciar Sesion",
         "forgot_password": "Recuperar Contrasena",
         "sign_out": "Cerrar Sesion",
+        "contacts": "Contactos",
+        "settings": "Ajustes",
       };
 
   //
@@ -14,5 +16,7 @@ class TitlesTranslations {
         "sign_in": "Sign In",
         "forgot_password": "Forgot Password",
         "sign_out": "Sign Out",
+        "contacts": "Contacts",
+        "settings": "Settings",
       };
 }
