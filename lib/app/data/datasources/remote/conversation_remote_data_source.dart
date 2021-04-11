@@ -36,7 +36,10 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
     try {
       var currentUser = firebaseAuthProvider.currentUser;
       if (currentUser == null) {
-        throw Exception("failed_user_not_found".tr);
+        throw ApiException(
+          code: 401,
+          error: "failed_user_not_signed".tr,
+        );
       }
 
       streamConversations = StreamController<List<Conversation>>();

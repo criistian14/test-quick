@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:testquick/app/presentation/pages/conversations/conversations_binding.dart';
-import 'package:testquick/app/presentation/pages/conversations/local_widgets/conversation_item.dart';
+import 'package:testquick/app/presentation/global_widgets/header_with_search.dart';
 
+import 'conversations_binding.dart';
 import 'conversations_controller.dart';
+import 'local_widgets/conversation_item.dart';
 
 class ConversationsPage extends StatelessWidget {
   @override
@@ -18,31 +17,9 @@ class ConversationsPage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 20.h,
-                    bottom: 30.h,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Chats",
-                        style: Theme.of(context).textTheme.headline1.copyWith(
-                              fontSize: 30.sp,
-                            ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          CupertinoIcons.search,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                HeaderWithSearch(
+                  title: "Chats",
+                  onSearch: () {},
                 ),
 
                 // Conversations List
