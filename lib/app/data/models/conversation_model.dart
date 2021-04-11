@@ -6,13 +6,13 @@ import 'package:testquick/app/domain/entities/message.dart';
 
 class ConversationModel extends Conversation {
   ConversationModel({
-    String uid,
+    String id,
     String meUid,
     List<MessageModel> messages,
     List<UserModel> users,
     MessageModel lastMessage,
   }) : super(
-          uid: uid,
+          id: id,
           meUid: meUid,
           messages: messages,
           users: users,
@@ -21,7 +21,7 @@ class ConversationModel extends Conversation {
 
   factory ConversationModel.fromFirestore(DocumentSnapshot snapshot) {
     return ConversationModel(
-      uid: snapshot.id,
+      id: snapshot.id,
       lastMessage: MessageModel.fromJson(snapshot.data()["last_message"]),
     );
   }
@@ -34,7 +34,7 @@ class ConversationModel extends Conversation {
     Message lastMessage,
   }) =>
       ConversationModel(
-        uid: uid ?? this.uid,
+        id: uid ?? this.id,
         meUid: meUid ?? this.meUid,
         messages: messages ?? this.messages,
         users: users ?? this.users,

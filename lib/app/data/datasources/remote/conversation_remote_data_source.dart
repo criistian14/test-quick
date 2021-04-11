@@ -6,13 +6,12 @@ import 'package:get/get.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/conversation_model.dart';
 import 'package:testquick/app/data/models/user_model.dart';
-import 'package:testquick/app/domain/entities/conversation.dart';
 
 abstract class ConversationRemoteDataSource {
   /// Calls the TestQuick api to Firebase, collections("conversations").snapshot()
   ///
   /// Throws a [ServerFailure] for all error codes.
-  Stream<List<Conversation>> listenConversations();
+  Stream<List<ConversationModel>> listenConversations();
 
   /// Calls the close() by stream conversations
   ///
@@ -24,7 +23,8 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
   final FirebaseAuth firebaseAuthProvider;
   final FirebaseFirestore firebaseFirestore;
 
-  StreamController<List<Conversation>> streamConversations;
+  StreamController<List<ConversationModel>> _streamConversations;
+  StreamSubscription<QuerySnapshot> _streamConversationsFirestore;
 
   ConversationRemoteDataSourceImpl({
     this.firebaseAuthProvider,
@@ -32,7 +32,7 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
   });
 
   @override
-  Stream<List<Conversation>> listenConversations() {
+  Stream<List<ConversationModel>> listenConversations() {
     try {
       var currentUser = firebaseAuthProvider.currentUser;
       if (currentUser == null) {
@@ -42,19 +42,20 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
         );
       }
 
-      streamConversations = StreamController<List<Conversation>>();
+      _streamConversations = StreamController<List<ConversationModel>>();
 
       Stream<QuerySnapshot> conversationsFirestore = firebaseFirestore
           .collection("conversations")
           .where("users", arrayContains: currentUser.uid)
           .snapshots();
 
-      List<Conversation> conversations = [];
+      List<ConversationModel> conversations = [];
 
       // Listen to changes in firebase conversations
-      conversationsFirestore.listen((QuerySnapshot query) async {
-        conversations.clear();
+      _streamConversationsFirestore =
+          conversationsFirestore.listen((QuerySnapshot query) async {
         ConversationModel conversation;
+        conversations.clear();
 
         for (QueryDocumentSnapshot doc in query.docs) {
           if (doc.data()["users"] == null) {
@@ -65,6 +66,9 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
             doc.data()["users"],
           );
 
+          if (doc.data()["last_message"] == null) continue;
+
+          // Parse conversation
           conversation = ConversationModel.fromFirestore(doc);
           conversations.add(conversation.copyWith(
             meUid: currentUser.uid,
@@ -73,10 +77,10 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
         }
 
         // Add new list conversation to stream
-        streamConversations.add(conversations);
+        _streamConversations.add(conversations);
       });
 
-      return streamConversations.stream;
+      return _streamConversations.stream;
     } catch (e) {
       throw ApiException(
         error: e.toString(),
@@ -102,6 +106,7 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
   }
 
   Future<void> stopListeningConversations() async {
-    await streamConversations?.close();
+    await _streamConversations?.close();
+    await _streamConversationsFirestore?.cancel();
   }
 }

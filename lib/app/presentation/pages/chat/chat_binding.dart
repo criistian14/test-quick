@@ -10,6 +10,7 @@ class ChatBinding extends Bindings {
     Get.lazyPut<ChatController>(() => ChatController(
           getMessages: sl(),
           stopListeningMessages: sl(),
+          saveMessage: sl(),
         ));
   }
 }

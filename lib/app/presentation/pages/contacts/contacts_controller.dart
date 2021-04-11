@@ -46,19 +46,27 @@ class ContactsController extends GetxController {
 
   void goChat({
     User contact,
-  }) {
+  }) async {
+    // Stop listening to contacts for performance
+    await stopListeningContacts();
+
     Get.toNamed(AppRoutes.CHAT, arguments: {
       "user": contact,
+    }).then((value) {
+      getContacts();
     });
   }
 
-  @override
-  void onClose() async {
+  Future<void> stopListeningContacts() async {
     await _contactsListStream?.cancel();
     var stopListeningContactsCall =
         await _stopListeningContacts.call(NoParams());
     stopListeningContactsCall.fold(Alerts.errorAlertUseCase, (r) {});
+  }
 
+  @override
+  void onClose() async {
+    await stopListeningContacts();
     super.onClose();
   }
 }

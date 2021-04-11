@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:testquick/app/data/models/conversation_model.dart';
 import 'package:testquick/app/data/models/user_model.dart';
-import 'package:testquick/app/domain/entities/conversation.dart';
 import 'package:testquick/app/presentation/global_widgets/image_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../conversations_controller.dart';
 
 class ConversationItem extends StatelessWidget {
-  final Conversation conversation;
+  final ConversationModel conversation;
   final ConversationsController _conversationsCtrl =
       Get.find<ConversationsController>();
 
@@ -82,21 +82,26 @@ class ConversationItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "${user.firstName} ${user.lastName}",
-          style: Theme.of(context).textTheme.headline5.copyWith(
-                fontSize: 20.sp,
-              ),
-        ),
-        Text(
-          timeago.format(
-            conversation.lastMessage.createdAt,
-            locale: "en_short",
+        Container(
+          width: 220.w,
+          child: Text(
+            "${user.firstName} ${user.lastName}",
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.headline5.copyWith(
+                  fontSize: 20.sp,
+                ),
           ),
-          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                fontSize: 15.sp,
-              ),
         ),
+        if (conversation.lastMessage.createdAt != null)
+          Text(
+            timeago.format(
+              conversation.lastMessage.createdAt,
+              locale: "en_short",
+            ),
+            style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  fontSize: 15.sp,
+                ),
+          ),
       ],
     );
   }

@@ -4,7 +4,7 @@ import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/core/errors/failures.dart';
 import 'package:testquick/app/core/utils/network_info.dart';
 import 'package:testquick/app/data/datasources/remote/auth_remote_data_source.dart';
-import 'package:testquick/app/domain/entities/user.dart';
+import 'package:testquick/app/data/models/user_model.dart';
 import 'package:testquick/app/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -17,7 +17,7 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, User>> signInWithEmail(User user) async {
+  Future<Either<Failure, UserModel>> signInWithEmail(UserModel user) async {
     try {
       final foundUser = await remoteDataSource.signInWithEmail(user);
 

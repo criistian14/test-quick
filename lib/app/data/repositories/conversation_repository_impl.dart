@@ -4,7 +4,7 @@ import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/core/errors/failures.dart';
 import 'package:testquick/app/core/utils/network_info.dart';
 import 'package:testquick/app/data/datasources/remote/conversation_remote_data_source.dart';
-import 'package:testquick/app/domain/entities/conversation.dart';
+import 'package:testquick/app/data/models/conversation_model.dart';
 import 'package:testquick/app/domain/repositories/conversation_repository.dart';
 
 class ConversationRepositoryImpl implements ConversationRepository {
@@ -17,7 +17,7 @@ class ConversationRepositoryImpl implements ConversationRepository {
   });
 
   @override
-  Future<Either<Failure, Stream<List<Conversation>>>>
+  Future<Either<Failure, Stream<List<ConversationModel>>>>
       listenConversations() async {
     try {
       return Right(remoteDataSource.listenConversations());

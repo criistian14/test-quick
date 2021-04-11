@@ -4,13 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:get/get.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/user_model.dart';
-import 'package:testquick/app/domain/entities/user.dart';
 
 abstract class AuthRemoteDataSource {
   /// Calls the TestQuick api to Firebase, signInWithEmailAndPassword()
   ///
   /// Throws a [ServerFailure] for all error codes.
-  Future<User> signInWithEmail(User user);
+  Future<UserModel> signInWithEmail(UserModel user);
 
   /// Calls the TestQuick api to Firebase, currentUser
   ///
@@ -33,7 +32,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   });
 
   @override
-  Future<User> signInWithEmail(User user) async {
+  Future<UserModel> signInWithEmail(UserModel user) async {
     UserCredential userCredential;
     DocumentSnapshot userFireStore;
 

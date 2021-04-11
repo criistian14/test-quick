@@ -4,27 +4,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:get/get.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
+import 'package:testquick/app/data/models/conversation_model.dart';
 import 'package:testquick/app/data/models/message_model.dart';
-import 'package:testquick/app/domain/entities/message.dart';
-import 'package:testquick/app/domain/entities/user.dart';
+import 'package:testquick/app/data/models/user_model.dart';
 
 abstract class MessageRemoteDataSource {
   /// Calls the TestQuick api to Firebase, collections("message").snapshot()
   ///
   /// Throws a [ServerFailure] for all error codes.
-  Stream<List<Message>> listenMessages(User contact);
+  Stream<List<MessageModel>> listenMessages(UserModel contact);
 
   /// Calls the close() by stream conversations
   ///
   /// Throws a [ServerFailure] for all error codes.
   Future<void> stopListeningMessages();
+
+  /// Calls the TestQuick api to Firebase, add()
+  ///
+  /// Throws a [ServerFailure] for all error codes.
+  Future<MessageModel> saveMessage(MessageModel message);
 }
 
 class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   final FirebaseAuth firebaseAuthProvider;
   final FirebaseFirestore firebaseFirestore;
 
-  StreamController<List<Message>> streamMessages;
+  StreamController<List<MessageModel>> _streamMessages;
+  StreamSubscription<QuerySnapshot> _streamMessagesFirestore;
 
   MessageRemoteDataSourceImpl({
     this.firebaseAuthProvider,
@@ -32,7 +38,7 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   });
 
   @override
-  Stream<List<Message>> listenMessages(User contact) {
+  Stream<List<MessageModel>> listenMessages(UserModel contact) {
     try {
       var currentUser = firebaseAuthProvider.currentUser;
       if (currentUser == null) {
@@ -42,48 +48,48 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
         );
       }
 
-      streamMessages = StreamController<List<Message>>();
+      _streamMessages = StreamController<List<MessageModel>>();
 
-      firebaseFirestore
-          .collection("conversations")
-          .where("users", arrayContains: currentUser.uid)
-          .get()
-          .then((conversationsFirestore) {
-        //    Validar con el contact
-        var conversationFound;
-        for (var doc in conversationsFirestore.docs) {
-          conversationFound = (doc.data()["users"] as List)
-              .firstWhere((userId) => userId == contact.uid, orElse: () {});
-
-          if (conversationFound != null) break;
-        }
+      // Validate if the conversation exists
+      _checkConversationAlreadyExists(
+        currentUserId: currentUser.uid,
+        contactId: contact.uid,
+      ).then((conversationFound) {
         if (conversationFound == null) return;
 
         Stream<QuerySnapshot> messagesFirestore = firebaseFirestore
             .collection("conversations")
-            .doc(conversationsFirestore.docs[0].id)
+            .doc(conversationFound.id)
             .collection("messages")
             .orderBy("created_at", descending: true)
             .snapshots();
 
-        List<Message> messages = [];
+        List<MessageModel> messages = [];
 
         // Listen to changes in firebase messages
-        messagesFirestore.listen((QuerySnapshot query) async {
+        _streamMessagesFirestore =
+            messagesFirestore.listen((QuerySnapshot query) async {
+          await _markMessageRead(
+            idConversation: conversationFound.id,
+            contactId: contact.uid,
+          );
+
           messages.clear();
           MessageModel message;
 
           for (QueryDocumentSnapshot doc in query.docs) {
             message = MessageModel.fromJson(doc.data());
-            messages.add(message);
+            messages.add(message.copyWith(
+              idConversation: conversationFound.id,
+            ));
           }
 
           // Add new list message to stream
-          streamMessages.add(messages);
+          _streamMessages.add(messages);
         });
       });
 
-      return streamMessages.stream;
+      return _streamMessages.stream;
     } catch (e) {
       throw ApiException(
         error: e.toString(),
@@ -92,6 +98,144 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   }
 
   Future<void> stopListeningMessages() async {
-    await streamMessages?.close();
+    await _streamMessages?.close();
+    await _streamMessagesFirestore?.cancel();
+  }
+
+  @override
+  Future<MessageModel> saveMessage(MessageModel message) async {
+    try {
+      var currentUser = firebaseAuthProvider.currentUser;
+      if (currentUser == null) {
+        throw ApiException(
+          code: 401,
+          error: "failed_user_not_signed".tr,
+        );
+      }
+
+      // Add values to message
+      message = message.copyWith(
+        idFrom: currentUser.uid,
+      );
+      var createAt = FieldValue.serverTimestamp();
+
+      // If it is a new conversation
+      if (message.idConversation == null) {
+        // Check if the conversation is already started
+        QueryDocumentSnapshot conversationFound =
+            await _checkConversationAlreadyExists(
+          currentUserId: currentUser.uid,
+          contactId: message.idTo,
+        );
+
+        if (conversationFound != null) {
+          message = message.copyWith(
+            idConversation: conversationFound.id,
+          );
+
+          // Create new conversation if it does not exist
+        } else {
+          CollectionReference conversations =
+              firebaseFirestore.collection("conversations");
+
+          DocumentReference newConversation = await conversations.add({
+            "last_message": null,
+            "users": [
+              message.idFrom,
+              message.idTo,
+            ],
+          });
+
+          message = message.copyWith(
+            idConversation: newConversation.id,
+          );
+        }
+      }
+
+      // Update last message
+      DocumentReference conversation = firebaseFirestore
+          .collection("conversations")
+          .doc(message.idConversation);
+
+      await conversation.update({
+        "last_message": {
+          ...message.toJson(),
+          "created_at": createAt,
+        },
+      });
+
+      // Add new message
+      CollectionReference messages = conversation.collection("messages");
+      messages.add({
+        ...message.toJson(),
+        "created_at": createAt,
+      });
+
+      return message;
+    } catch (e) {
+      throw ApiException(
+        error: e.toString(),
+      );
+    }
+  }
+
+  // * Check if there is a conversation with the current user and the contact.
+  Future<QueryDocumentSnapshot> _checkConversationAlreadyExists({
+    String currentUserId,
+    String contactId,
+  }) async {
+    QuerySnapshot conversationsFirestore = await firebaseFirestore
+        .collection("conversations")
+        .where("users", arrayContains: currentUserId)
+        .get();
+
+    QueryDocumentSnapshot conversationFound;
+    for (var doc in conversationsFirestore.docs) {
+      var userFound = (doc.data()["users"] as List)
+          .firstWhere((userId) => userId == contactId, orElse: () {});
+
+      if (userFound != null) {
+        conversationFound = doc;
+        break;
+      }
+    }
+
+    return conversationFound;
+  }
+
+  // * Mark as read the last_message and also all messages from the sender.
+  Future<void> _markMessageRead({
+    String idConversation,
+    String contactId,
+  }) async {
+    // Update last message
+    DocumentReference conversationReference =
+        firebaseFirestore.collection("conversations").doc(idConversation);
+
+    DocumentSnapshot conversationData = await conversationReference.get();
+    ConversationModel conversation =
+        ConversationModel.fromFirestore(conversationData);
+
+    // Only update if the message is from the contact (sender)
+    if (conversation.lastMessage.idFrom == contactId) {
+      await conversationReference.update({
+        "last_message.read": true,
+      });
+    }
+
+    // Update messages
+    CollectionReference messages = conversationReference.collection("messages");
+    WriteBatch batch = firebaseFirestore.batch();
+
+    QuerySnapshot messagesContact =
+        await messages.where("id_from", isEqualTo: contactId).get();
+
+    messagesContact.docs.forEach((message) {
+      batch.update(message.reference, {
+        "read": true,
+      });
+    });
+
+    batch.commit();
   }
 }

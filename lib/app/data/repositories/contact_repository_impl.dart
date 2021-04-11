@@ -4,7 +4,7 @@ import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/core/errors/failures.dart';
 import 'package:testquick/app/core/utils/network_info.dart';
 import 'package:testquick/app/data/datasources/remote/contact_remote_data_source.dart';
-import 'package:testquick/app/domain/entities/user.dart';
+import 'package:testquick/app/data/models/user_model.dart';
 import 'package:testquick/app/domain/repositories/contact_repository.dart';
 
 class ContactRepositoryImpl implements ContactRepository {
@@ -17,7 +17,7 @@ class ContactRepositoryImpl implements ContactRepository {
   });
 
   @override
-  Future<Either<Failure, Stream<List<User>>>> listenContacts() async {
+  Future<Either<Failure, Stream<List<UserModel>>>> listenContacts() async {
     try {
       return Right(remoteDataSource.listenContacts());
     } on ApiException catch (e) {

@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testquick/app/domain/entities/message.dart';
 
 class MessageModel extends Message {
+  final String idConversation;
+  final File pictureFile, audioFile;
+
   MessageModel({
     String message,
     String picture,
@@ -10,6 +15,9 @@ class MessageModel extends Message {
     String idFrom,
     String idTo,
     DateTime createdAt,
+    this.idConversation,
+    this.pictureFile,
+    this.audioFile,
   }) : super(
           message: message,
           picture: picture,
@@ -33,4 +41,36 @@ class MessageModel extends Message {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "message": message,
+      "picture": picture,
+      "audio": audio,
+      "read": read ?? false,
+      "id_from": idFrom,
+      "id_to": idTo,
+    };
+  }
+
+  MessageModel copyWith({
+    String message,
+    String picture,
+    String audio,
+    bool read,
+    String idFrom,
+    String idTo,
+    DateTime createdAt,
+    String idConversation,
+  }) =>
+      MessageModel(
+        message: message ?? this.message,
+        picture: picture ?? this.picture,
+        audio: audio ?? this.audio,
+        read: read ?? this.read,
+        idFrom: idFrom ?? this.idFrom,
+        idTo: idTo ?? this.idTo,
+        createdAt: createdAt ?? this.createdAt,
+        idConversation: idConversation ?? this.idConversation,
+      );
 }

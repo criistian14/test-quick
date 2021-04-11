@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:testquick/app/presentation/global_widgets/image_avatar.dart';
 import 'package:testquick/app/presentation/pages/chat/local_widgets/chat_item.dart';
+import 'package:testquick/app/presentation/pages/chat/local_widgets/field_chat.dart';
 
 import 'chat_controller.dart';
 
@@ -80,85 +81,7 @@ class ChatPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                constraints: BoxConstraints(
-                  minHeight: 80.h,
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.h,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).appBarTheme.backgroundColor,
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Theme.of(context).shadowColor,
-                      offset: Offset(0, 8),
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 299.w,
-                      child: TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 4,
-                        minLines: 1,
-                        decoration: InputDecoration(
-                          hintText: "Type a message",
-                          isDense: true,
-                          filled: true,
-                          fillColor: Theme.of(context).scaffoldBackgroundColor,
-                          prefixIcon: IconButton(
-                            onPressed: () {
-                              print("Record Audio");
-                            },
-                            color: Colors.blueGrey.withOpacity(0.8),
-                            icon: Icon(
-                              Icons.mic,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              print("Camera");
-                            },
-                            color: Colors.blueGrey.withOpacity(0.8),
-                            icon: Icon(
-                              CupertinoIcons.camera,
-                            ),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12.w,
-                            vertical: 14.h,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(60.r),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Material(
-                      shape: CircleBorder(),
-                      color: Theme.of(context).appBarTheme.backgroundColor,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(30.r),
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.all(12.r),
-                          child: Icon(
-                            Icons.send,
-                            color: Colors.blueGrey.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ChatField(),
             ],
           ),
         ),

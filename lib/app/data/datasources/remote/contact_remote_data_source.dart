@@ -5,13 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:get/get.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/user_model.dart';
-import 'package:testquick/app/domain/entities/user.dart';
 
 abstract class ContactRemoteDataSource {
   /// Calls the TestQuick api to Firebase, collections("users").snapshot()
   ///
   /// Throws a [ServerFailure] for all error codes.
-  Stream<List<User>> listenContacts();
+  Stream<List<UserModel>> listenContacts();
 
   /// Calls the close() by stream contacts
   ///
@@ -23,7 +22,8 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
   final FirebaseAuth firebaseAuthProvider;
   final FirebaseFirestore firebaseFirestore;
 
-  StreamController<List<User>> streamContacts;
+  StreamController<List<UserModel>> _streamContacts;
+  StreamSubscription<QuerySnapshot> _streamContactsFirestore;
 
   ContactRemoteDataSourceImpl({
     this.firebaseAuthProvider,
@@ -31,7 +31,7 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
   });
 
   @override
-  Stream<List<User>> listenContacts() {
+  Stream<List<UserModel>> listenContacts() {
     try {
       var currentUser = firebaseAuthProvider.currentUser;
       if (currentUser == null) {
@@ -41,15 +41,16 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
         );
       }
 
-      streamContacts = StreamController<List<User>>();
+      _streamContacts = StreamController<List<UserModel>>();
 
       Stream<QuerySnapshot> contactsFirestore =
           firebaseFirestore.collection("users").snapshots();
 
-      List<User> contacts = [];
+      List<UserModel> contacts = [];
 
       // Listen to changes in firebase contacts
-      contactsFirestore.listen((QuerySnapshot query) async {
+      _streamContactsFirestore =
+          contactsFirestore.listen((QuerySnapshot query) async {
         contacts.clear();
         UserModel contact;
 
@@ -66,10 +67,10 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
         }
 
         // Add new list contact to stream
-        streamContacts.add(contacts);
+        _streamContacts.add(contacts);
       });
 
-      return streamContacts.stream;
+      return _streamContacts.stream;
     } catch (e) {
       throw ApiException(
         error: e.toString(),
@@ -79,6 +80,7 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
 
   @override
   Future<void> stopListeningContacts() async {
-    await streamContacts?.close();
+    await _streamContacts?.close();
+    await _streamContactsFirestore?.cancel();
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testquick/app/domain/usecases/save_message.dart';
 
 import 'app/core/utils/network_info.dart';
 import 'app/data/datasources/remote/auth_remote_data_source.dart';
@@ -83,6 +84,9 @@ void _initUseCases() {
   );
   sl.registerLazySingleton(
     () => StopListeningMessages(repository: sl()),
+  );
+  sl.registerLazySingleton(
+    () => SaveMessage(repository: sl()),
   );
 }
 
