@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:testquick/app/data/models/user_model.dart';
 import 'package:testquick/app/domain/entities/conversation.dart';
-import 'package:testquick/app/presentation/pages/conversations/conversations_controller.dart';
+import 'package:testquick/app/presentation/global_widgets/image_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:get/get.dart';
+
+import '../conversations_controller.dart';
 
 class ConversationItem extends StatelessWidget {
   final Conversation conversation;
@@ -36,13 +38,13 @@ class ConversationItem extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(20.r),
           onTap: () => _conversationsCtrl.goChat(
-            conversation: conversation,
+            user: userReceiver,
           ),
           child: Row(
             children: [
-              _imgAvatar(
-                context: context,
+              ImageAvatar(
                 user: userReceiver,
+                radius: 30.r,
               ),
               Container(
                 width: 260.w,
@@ -69,23 +71,6 @@ class ConversationItem extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _imgAvatar({
-    BuildContext context,
-    UserModel user,
-  }) {
-    return CircleAvatar(
-      child: Text(
-        user.firstName[0],
-        style: Theme.of(context).textTheme.headline5.copyWith(
-              color: Colors.white,
-            ),
-      ),
-      foregroundImage: (user.avatar != null) ? NetworkImage(user.avatar) : null,
-      backgroundColor: Theme.of(context).accentColor,
-      radius: 30.r,
     );
   }
 
@@ -135,7 +120,8 @@ class ConversationItem extends StatelessWidget {
         ),
 
         // Notify that there are unread messages
-        if (!conversation.lastMessage.read)
+        if (!conversation.lastMessage.read &&
+            conversation.meUid != conversation.lastMessage.idFrom)
           Container(
             width: 12.r,
             height: 12.r,

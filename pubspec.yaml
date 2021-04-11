@@ -37,6 +37,8 @@ dependencies:
   flutter_svg: ^0.21.0+1
   # Create fuzzy timestamps
   timeago: ^3.0.2
+  # Parsing, manipulating, querying and formatting dates
+  jiffy: ^4.1.0
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:testquick/app/domain/entities/user.dart';
+import 'package:testquick/app/presentation/global_widgets/image_avatar.dart';
 
 import '../contacts_controller.dart';
 
@@ -32,8 +33,9 @@ class ContactItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              _imgAvatar(
-                context: context,
+              ImageAvatar(
+                user: contact,
+                radius: 30.r,
               ),
               Container(
                 width: 260.w,
@@ -55,23 +57,6 @@ class ContactItem extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _imgAvatar({
-    BuildContext context,
-  }) {
-    return CircleAvatar(
-      child: Text(
-        contact.firstName[0],
-        style: Theme.of(context).textTheme.headline5.copyWith(
-              color: Colors.white,
-            ),
-      ),
-      foregroundImage:
-          (contact.avatar != null) ? NetworkImage(contact.avatar) : null,
-      backgroundColor: Theme.of(context).accentColor,
-      radius: 30.r,
     );
   }
 

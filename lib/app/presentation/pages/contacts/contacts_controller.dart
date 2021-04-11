@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:testquick/app/core/routes/app_routes.dart';
 import 'package:testquick/app/core/usecases/usecase.dart';
 import 'package:testquick/app/core/utils/alerts.dart';
 import 'package:testquick/app/domain/entities/user.dart';
@@ -33,6 +34,7 @@ class ContactsController extends GetxController {
 
   void getContacts() async {
     loading.value = true;
+
     var getContactsCall = await _getContacts.call(NoParams());
     getContactsCall.fold(Alerts.errorAlertUseCase, (r) {
       _contactsListStream = r.listen((event) {
@@ -42,7 +44,13 @@ class ContactsController extends GetxController {
     });
   }
 
-  void goChat({User contact}) {}
+  void goChat({
+    User contact,
+  }) {
+    Get.toNamed(AppRoutes.CHAT, arguments: {
+      "user": contact,
+    });
+  }
 
   @override
   void onClose() async {

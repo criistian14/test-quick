@@ -3,12 +3,13 @@ import 'package:testquick/app/domain/entities/message.dart';
 import 'package:testquick/app/domain/entities/user.dart';
 
 class Conversation extends Equatable {
-  final String meUid;
+  final String uid, meUid;
   final List<Message> messages;
   final List<User> users;
   final Message lastMessage;
 
   Conversation({
+    this.uid,
     this.meUid,
     this.messages,
     this.users,
@@ -17,6 +18,7 @@ class Conversation extends Equatable {
 
   @override
   List<Object> get props => [
+        uid,
         meUid,
         messages,
         users,

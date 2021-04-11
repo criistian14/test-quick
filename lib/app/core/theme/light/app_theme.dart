@@ -11,6 +11,8 @@ ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: ConstantsTheme.backgroundColor,
   textTheme: textTheme,
   bottomNavigationBarTheme: _bottomNavigationBar,
+  appBarTheme: _appBarTheme,
+  shadowColor: ConstantsTheme.greyLightColor,
 );
 
 BottomNavigationBarThemeData _bottomNavigationBar =
@@ -18,4 +20,18 @@ BottomNavigationBarThemeData _bottomNavigationBar =
   backgroundColor: ConstantsTheme.pureWitheColor,
   selectedItemColor: ConstantsTheme.accentColor,
   unselectedItemColor: ConstantsTheme.greyLightColor,
+);
+
+AppBarTheme _appBarTheme = AppBarTheme(
+  backgroundColor: ConstantsTheme.pureWitheColor,
+  titleTextStyle: TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+  ),
+  actionsIconTheme: IconThemeData(
+    color: Colors.black,
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.blueGrey,
+  ),
 );

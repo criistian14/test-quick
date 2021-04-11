@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:testquick/app/core/routes/app_routes.dart';
 import 'package:testquick/app/core/usecases/usecase.dart';
 import 'package:testquick/app/core/utils/alerts.dart';
 import 'package:testquick/app/domain/entities/conversation.dart';
+import 'package:testquick/app/domain/entities/user.dart';
 import 'package:testquick/app/domain/usecases/listen_conversations.dart';
 import 'package:meta/meta.dart';
 import 'package:testquick/app/domain/usecases/stop_listening_conversations.dart';
@@ -43,8 +45,12 @@ class ConversationsController extends GetxController {
   }
 
   void goChat({
-    Conversation conversation,
-  }) {}
+    User user,
+  }) {
+    Get.toNamed(AppRoutes.CHAT, arguments: {
+      "user": user,
+    });
+  }
 
   @override
   void onClose() async {
