@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:meta/meta.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
@@ -28,6 +30,7 @@ abstract class MessageRemoteDataSource {
 class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   final FirebaseAuth firebaseAuthProvider;
   final FirebaseFirestore firebaseFirestore;
+  final FirebaseStorage firebaseStorage;
 
   StreamController<List<MessageModel>> _streamMessages;
   StreamSubscription<QuerySnapshot> _streamMessagesFirestore;
@@ -35,6 +38,7 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   MessageRemoteDataSourceImpl({
     this.firebaseAuthProvider,
     this.firebaseFirestore,
+    this.firebaseStorage,
   });
 
   @override
@@ -119,43 +123,34 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
       );
       var createAt = FieldValue.serverTimestamp();
 
-      // If it is a new conversation
-      if (message.idConversation == null) {
-        // Check if the conversation is already started
-        QueryDocumentSnapshot conversationFound =
-            await _checkConversationAlreadyExists(
-          currentUserId: currentUser.uid,
-          contactId: message.idTo,
-        );
-
-        if (conversationFound != null) {
-          message = message.copyWith(
-            idConversation: conversationFound.id,
-          );
-
-          // Create new conversation if it does not exist
-        } else {
-          CollectionReference conversations =
-              firebaseFirestore.collection("conversations");
-
-          DocumentReference newConversation = await conversations.add({
-            "last_message": null,
-            "users": [
-              message.idFrom,
-              message.idTo,
-            ],
-          });
-
-          message = message.copyWith(
-            idConversation: newConversation.id,
-          );
-        }
-      }
+      final conversationId = await _checkIdConversation(
+        message: message,
+        currentUserId: currentUser.uid,
+      );
+      message.copyWith(
+        idConversation: conversationId,
+      );
 
       // Update last message
       DocumentReference conversation = firebaseFirestore
           .collection("conversations")
           .doc(message.idConversation);
+
+      // If the message is a picture
+      if (message.pictureFile != null) {
+        final uploadTask = await firebaseStorage
+            .ref()
+            .child(
+              "/messages/images/${message.pictureFile.path.split("/").last}",
+            )
+            .putFile(message.pictureFile);
+
+        await uploadTask.ref.getDownloadURL().then((fileURL) {
+          message = message.copyWith(
+            picture: fileURL,
+          );
+        });
+      }
 
       await conversation.update({
         "last_message": {
@@ -237,5 +232,37 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
     });
 
     batch.commit();
+  }
+
+  Future<String> _checkIdConversation({
+    @required MessageModel message,
+    @required currentUserId,
+  }) async {
+    if (message.idConversation != null) return message.idConversation;
+
+    // Check if the conversation is already started
+    QueryDocumentSnapshot conversationFound =
+        await _checkConversationAlreadyExists(
+      currentUserId: currentUserId,
+      contactId: message.idTo,
+    );
+
+    if (conversationFound != null) {
+      return conversationFound.id;
+    }
+
+    // Create new conversation if it does not exist
+    CollectionReference conversations =
+        firebaseFirestore.collection("conversations");
+
+    DocumentReference newConversation = await conversations.add({
+      "last_message": null,
+      "users": [
+        message.idFrom,
+        message.idTo,
+      ],
+    });
+
+    return newConversation.id;
   }
 }

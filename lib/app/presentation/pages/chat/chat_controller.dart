@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:testquick/app/core/usecases/usecase.dart';
 import 'package:testquick/app/core/utils/alerts.dart';
+import 'package:testquick/app/core/utils/modals.dart';
 import 'package:testquick/app/data/models/message_model.dart';
 import 'package:testquick/app/data/models/user_model.dart';
 import 'package:testquick/app/domain/entities/form/custom_field_form.dart';
@@ -24,6 +28,8 @@ class ChatController extends GetxController {
 
   CustomFieldForm messageText = CustomFieldForm.pure();
   TextEditingController messageFieldCtrl = TextEditingController();
+
+  ImagePicker picker = ImagePicker();
 
   ChatController({
     @required ListenMessages getMessages,
@@ -79,21 +85,40 @@ class ChatController extends GetxController {
     return messageFieldCtrl.text.length == 0;
   }
 
-  void sendMessage() async {
+  void sendText() async {
     MessageModel message = MessageModel(
       message: messageText.value,
       idTo: contact.uid,
     );
 
+    _sendMessage(message);
+
+    // Clear input field
+    messageFieldCtrl.clear();
+    update(['field']);
+  }
+
+  void sendPicture() async {
+    ImageSource source = await ModalsUtils.pickSourceImage();
+    if (source == null) return;
+
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile == null) return;
+
+    MessageModel message = MessageModel(
+      pictureFile: File(pickedFile.path),
+      idTo: contact.uid,
+    );
+
+    _sendMessage(message);
+  }
+
+  void _sendMessage(MessageModel message) async {
     if (messagesList.isNotEmpty) {
       message = message.copyWith(
         idConversation: messagesList[0].idConversation,
       );
     }
-
-    // Clear input field
-    messageFieldCtrl.clear();
-    update(['field']);
 
     var saveMessageCall = await _saveMessage.call(message);
     saveMessageCall.fold(Alerts.errorAlertUseCase, (r) async {

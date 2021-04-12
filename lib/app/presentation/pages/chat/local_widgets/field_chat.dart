@@ -57,9 +57,7 @@ class ChatField extends StatelessWidget {
                       : null,
                   suffixIcon: chatCtrl.isEmptyField()
                       ? IconButton(
-                          onPressed: () {
-                            print("Camera");
-                          },
+                          onPressed: chatCtrl.sendPicture,
                           color: Colors.blueGrey.withOpacity(0.8),
                           icon: Icon(
                             CupertinoIcons.camera,
@@ -82,7 +80,7 @@ class ChatField extends StatelessWidget {
               color: Theme.of(context).appBarTheme.backgroundColor,
               child: InkWell(
                 borderRadius: BorderRadius.circular(30.r),
-                onTap: chatCtrl.sendMessage,
+                onTap: chatCtrl.sendText,
                 child: Container(
                   padding: EdgeInsets.all(12.r),
                   child: Icon(

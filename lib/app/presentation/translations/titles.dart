@@ -7,6 +7,9 @@ class TitlesTranslations {
         "sign_out": "Cerrar Sesion",
         "contacts": "Contactos",
         "settings": "Ajustes",
+        "gallery": "Galeria",
+        "camera": "Camara",
+        "image": "Imagen",
       };
 
   //
@@ -18,5 +21,8 @@ class TitlesTranslations {
         "sign_out": "Sign Out",
         "contacts": "Contacts",
         "settings": "Settings",
+        "gallery": "Gallery",
+        "camera": "Camera",
+        "image": "Image",
       };
 }

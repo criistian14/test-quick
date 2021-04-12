@@ -62,6 +62,8 @@ class MessageModel extends Message {
     String idTo,
     DateTime createdAt,
     String idConversation,
+    File pictureFile,
+    File audioFile,
   }) =>
       MessageModel(
         message: message ?? this.message,
@@ -72,5 +74,7 @@ class MessageModel extends Message {
         idTo: idTo ?? this.idTo,
         createdAt: createdAt ?? this.createdAt,
         idConversation: idConversation ?? this.idConversation,
+        pictureFile: pictureFile ?? this.pictureFile,
+        audioFile: audioFile ?? this.audioFile,
       );
 }

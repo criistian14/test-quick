@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:testquick/app/domain/usecases/save_message.dart';
 
 import 'app/core/utils/network_info.dart';
 import 'app/data/datasources/remote/auth_remote_data_source.dart';
@@ -21,6 +21,7 @@ import 'app/domain/usecases/is_authenticated.dart';
 import 'app/domain/usecases/listen_contacts.dart';
 import 'app/domain/usecases/listen_conversations.dart';
 import 'app/domain/usecases/listen_messages.dart';
+import 'app/domain/usecases/save_message.dart';
 import 'app/domain/usecases/sign_in_email_password.dart';
 import 'app/domain/usecases/sign_out.dart';
 import 'app/domain/usecases/stop_listening_contacts.dart';
@@ -47,6 +48,9 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
+  );
+  sl.registerLazySingleton<FirebaseStorage>(
+    () => FirebaseStorage.instance,
   );
 }
 
@@ -154,6 +158,7 @@ void _initDataSources() {
     () => MessageRemoteDataSourceImpl(
       firebaseAuthProvider: sl(),
       firebaseFirestore: sl(),
+      firebaseStorage: sl(),
     ),
   );
 }

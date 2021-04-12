@@ -115,12 +115,15 @@ class ConversationItem extends StatelessWidget {
       children: [
         Container(
           width: 240.w,
-          child: Text(
-            conversation.lastMessage.message,
+          child: RichText(
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  fontSize: 16.sp,
+            text: TextSpan(
+              children: [
+                _contentMessage(
+                  context: context,
                 ),
+              ],
+            ),
           ),
         ),
 
@@ -136,6 +139,51 @@ class ConversationItem extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+
+  InlineSpan _contentMessage({
+    BuildContext context,
+  }) {
+    if (conversation.lastMessage.picture != null) {
+      return WidgetSpan(
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Image.network(
+                conversation.lastMessage.picture,
+                height: 22.h,
+              ),
+            ),
+            SizedBox(
+              width: 5.w,
+            ),
+            Text(
+              "image".tr,
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    fontSize: 16.sp,
+                  ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (conversation.lastMessage.audio != null) {
+      return TextSpan(
+        text: "- " + "voice_note".tr + " -",
+        style: Theme.of(context).textTheme.bodyText1.copyWith(
+              fontSize: 16.sp,
+            ),
+      );
+    }
+
+    return TextSpan(
+      text: conversation.lastMessage.message,
+      style: Theme.of(context).textTheme.bodyText1.copyWith(
+            fontSize: 16.sp,
+          ),
     );
   }
 }
