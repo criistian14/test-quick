@@ -33,6 +33,21 @@ dependencies:
   firebase_analytics: ^7.1.1
   firebase_auth: ^1.0.3
   cloud_firestore: ^1.0.4
+  firebase_storage: ^8.0.3
+  # Render svg
+  flutter_svg: ^0.21.0+1
+  # Create fuzzy timestamps
+  timeago: ^3.0.2
+  # Parsing, manipulating, querying and formatting dates
+  jiffy: ^4.1.0
+  # Picking images
+  image_picker: ^0.7.4
+  # Play and record audio
+  flutter_sound_lite: ^8.0.1+11
+  # Request permissions and check their status
+  permission_handler: ^6.1.1
+  # Provides an Emoji Keyboard widget
+  emoji_picker_flutter: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +73,7 @@ flutter:
   # Custom Assets
   assets:
     - assets/images/
+    - assets/icons/
 
   # Custom Fonts
   fonts:

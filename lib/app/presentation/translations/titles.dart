@@ -5,6 +5,11 @@ class TitlesTranslations {
         "sign_in": "Iniciar Sesion",
         "forgot_password": "Recuperar Contrasena",
         "sign_out": "Cerrar Sesion",
+        "contacts": "Contactos",
+        "settings": "Ajustes",
+        "gallery": "Galeria",
+        "camera": "Camara",
+        "image": "Imagen",
       };
 
   //
@@ -14,5 +19,10 @@ class TitlesTranslations {
         "sign_in": "Sign In",
         "forgot_password": "Forgot Password",
         "sign_out": "Sign Out",
+        "contacts": "Contacts",
+        "settings": "Settings",
+        "gallery": "Gallery",
+        "camera": "Camera",
+        "image": "Image",
       };
 }

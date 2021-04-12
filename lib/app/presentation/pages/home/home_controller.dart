@@ -1,22 +1,57 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
-import 'package:testquick/app/core/routes/app_routes.dart';
-import 'package:testquick/app/core/usecases/usecase.dart';
-import 'package:testquick/app/core/utils/alerts.dart';
-import 'package:testquick/app/domain/usecases/sign_out.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeController extends GetxController {
-  final SignOut _signOut;
+  var page = 0.obs;
+  var pageCtrl = PageController(initialPage: 0).obs;
 
-  HomeController({
-    @required SignOut signOut,
-  })  : assert(signOut != null),
-        _signOut = signOut;
+  @override
+  void onReady() async {
+    super.onReady();
 
-  void signOut() async {
-    var signOutCall = await _signOut.call(NoParams());
-    signOutCall.fold(Alerts.errorAlertUseCase, (r) {
-      Get.offNamedUntil(AppRoutes.SIGN_IN, (route) => false);
+    _requestPermissions();
+  }
+
+  void changePage(int index) {
+    page.value = index;
+    pageCtrl.value.jumpToPage(index);
+  }
+
+  void _requestPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.storage,
+      Permission.microphone,
+    ].request();
+
+    bool allowAllPermissions = true;
+    bool permissionPermanentlyDenied = false;
+
+    statuses.forEach((key, value) {
+      if (value.isDenied) {
+        allowAllPermissions = false;
+      }
+
+      if (value.isPermanentlyDenied) {
+        permissionPermanentlyDenied = true;
+      }
     });
+
+    if (!allowAllPermissions || permissionPermanentlyDenied) {
+      Get.defaultDialog(
+        title: "permissions_must_enabled".tr,
+        content: ElevatedButton(
+          onPressed: () => Get.back(),
+          child: Text("OK"),
+        ),
+      ).then((value) async {
+        _requestPermissions();
+      });
+
+      if (permissionPermanentlyDenied) {
+        openAppSettings();
+      }
+    }
   }
 }

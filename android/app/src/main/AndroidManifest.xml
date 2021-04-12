@@ -4,10 +4,19 @@
     <!--  Internet  -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--  Camera  -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--  Play & Record Audio  -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Test Quick"
-        android:usesCleartextTraffic="true">
+        android:label="TestQuick"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        >
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

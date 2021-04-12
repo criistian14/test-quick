@@ -9,6 +9,7 @@ class UserModel extends User {
     String lastName,
     String email,
     String password,
+    String avatar,
     bool verifiedEmail,
   }) : super(
           id: id,
@@ -18,6 +19,7 @@ class UserModel extends User {
           lastName: lastName,
           email: email,
           password: password,
+          avatar: avatar,
           verifiedEmail: verifiedEmail,
         );
 
@@ -29,6 +31,7 @@ class UserModel extends User {
       lastName: json["last_name"],
       email: json["email"],
       password: json["password"],
+      avatar: json["avatar"],
       verifiedEmail: json["verified_email"] ?? false,
     );
   }
@@ -54,8 +57,7 @@ class UserModel extends User {
     String email,
     String password,
     bool verifiedEmail,
-    bool verified,
-    bool receiveMarketingEmail,
+    String avatar,
   }) =>
       UserModel(
         id: id ?? this.id,
@@ -65,6 +67,7 @@ class UserModel extends User {
         lastName: lastName ?? this.lastName,
         email: email ?? this.email,
         password: password ?? this.password,
+        avatar: avatar ?? this.avatar,
         verifiedEmail: verifiedEmail ?? this.verifiedEmail,
       );
 }

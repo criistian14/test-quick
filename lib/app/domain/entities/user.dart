@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   final int id;
-  final String uid, token, firstName, lastName, email, password;
+  final String uid, token, firstName, lastName, email, password, avatar;
   final bool verifiedEmail;
 
   User({
@@ -13,6 +13,7 @@ class User extends Equatable {
     this.lastName,
     this.email,
     this.password,
+    this.avatar,
     this.verifiedEmail,
   });
 
@@ -25,6 +26,7 @@ class User extends Equatable {
         lastName,
         email,
         password,
+        avatar,
         verifiedEmail,
       ];
 }
