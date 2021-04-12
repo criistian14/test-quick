@@ -42,6 +42,10 @@ dependencies:
   jiffy: ^4.1.0
   # Picking images
   image_picker: ^0.7.4
+  # Play and record audio
+  flutter_sound_lite: ^8.0.1+11
+  # Request permissions and check their status
+  permission_handler: ^6.1.1
 
 dev_dependencies:
   flutter_test:

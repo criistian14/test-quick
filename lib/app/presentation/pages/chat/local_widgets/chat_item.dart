@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:testquick/app/data/models/message_model.dart';
+
+import 'message_audio_item.dart';
+import 'message_picture_item.dart';
+import 'message_text_item.dart';
 
 class ChatItem extends StatelessWidget {
   final MessageModel message;
@@ -50,111 +51,22 @@ class ChatItem extends StatelessWidget {
     BuildContext context,
   }) {
     if (message.picture != null) {
-      return _messageIsPicture(
-        context: context,
+      return MessagePictureItem(
+        message: message,
+        isOwn: isOwn,
       );
     }
 
-    return _messageIsText(
-      context: context,
-    );
-  }
+    if (message.audio != null) {
+      return MessageAudioItem(
+        message: message,
+        isOwn: isOwn,
+      );
+    }
 
-  Widget _messageIsText({
-    BuildContext context,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          message.message,
-          style: TextStyle(
-            color: isOwn ? Colors.white : Colors.black,
-            fontWeight: FontWeight.w500,
-            letterSpacing: .6,
-            fontSize: 16.sp,
-          ),
-        ),
-        SizedBox(
-          width: 9.w,
-        ),
-        Text(
-          Jiffy(message.createdAt).format("h:mm a"),
-          style: TextStyle(
-            color: isOwn ? Colors.white : Colors.black,
-            letterSpacing: 0.3,
-            fontSize: 12.sp,
-          ),
-        ),
-        SizedBox(
-          width: 4.w,
-        ),
-        if (isOwn)
-          SvgPicture.asset(
-            "assets/icons/double-check.svg",
-            height: 17.h,
-            color: message.read ? Colors.white : Theme.of(context).shadowColor,
-          ),
-      ],
-    );
-  }
-
-  Widget _messageIsPicture({
-    BuildContext context,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Container(
-          height: 210.h,
-          child: Image.network(
-            message.picture,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes
-                      : null,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).backgroundColor,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: 9.h,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              Jiffy(message.createdAt).format("h:mm a"),
-              style: TextStyle(
-                color: isOwn ? Colors.white : Colors.black,
-                letterSpacing: 0.3,
-                fontSize: 12.sp,
-              ),
-            ),
-            SizedBox(
-              width: 4.w,
-            ),
-            if (isOwn)
-              SvgPicture.asset(
-                "assets/icons/double-check.svg",
-                height: 17.h,
-                color:
-                    message.read ? Colors.white : Theme.of(context).shadowColor,
-              ),
-          ],
-        ),
-      ],
+    return MessageTextItem(
+      message: message,
+      isOwn: isOwn,
     );
   }
 }

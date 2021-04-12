@@ -44,8 +44,9 @@ class ChatField extends StatelessWidget {
                   isDense: true,
                   filled: true,
                   fillColor: Theme.of(context).scaffoldBackgroundColor,
-                  prefixIcon: chatCtrl.isEmptyField()
-                      ? IconButton(
+                  prefixIcon: chatCtrl.soundRecorderStarted
+                      ? null
+                      : IconButton(
                           onPressed: () {
                             print("Record Audio");
                           },
@@ -53,15 +54,19 @@ class ChatField extends StatelessWidget {
                           icon: Icon(
                             Icons.mic,
                           ),
-                        )
-                      : null,
+                        ),
                   suffixIcon: chatCtrl.isEmptyField()
-                      ? IconButton(
-                          onPressed: chatCtrl.sendPicture,
-                          color: Colors.blueGrey.withOpacity(0.8),
-                          icon: Icon(
-                            CupertinoIcons.camera,
-                          ),
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: chatCtrl.sendPicture,
+                              color: Colors.blueGrey.withOpacity(0.8),
+                              icon: Icon(
+                                CupertinoIcons.camera,
+                              ),
+                            ),
+                          ],
                         )
                       : null,
                   contentPadding: EdgeInsets.symmetric(
@@ -77,15 +82,28 @@ class ChatField extends StatelessWidget {
             ),
             Material(
               shape: CircleBorder(),
-              color: Theme.of(context).appBarTheme.backgroundColor,
+              color: chatCtrl.soundRecorderStarted
+                  ? Colors.red
+                  : Theme.of(context).appBarTheme.backgroundColor,
               child: InkWell(
                 borderRadius: BorderRadius.circular(30.r),
-                onTap: chatCtrl.sendText,
-                child: Container(
-                  padding: EdgeInsets.all(12.r),
-                  child: Icon(
-                    Icons.send,
-                    color: Colors.blueGrey.withOpacity(0.8),
+                onTap: () {},
+                child: GestureDetector(
+                  onTap: chatCtrl.sendText,
+                  onLongPress: chatCtrl.startRecordVoiceNote,
+                  onLongPressUp: chatCtrl.sendVoiceNote,
+                  child: Container(
+                    padding: EdgeInsets.all(12.r),
+                    child: Icon(
+                      _iconSubmit(
+                        context: context,
+                        chatCtrl: chatCtrl,
+                      ),
+                      color: chatCtrl.soundRecorderStarted
+                          ? Colors.white
+                          : Colors.blueGrey.withOpacity(0.8),
+                      size: chatCtrl.soundRecorderStarted ? 55.r : null,
+                    ),
                   ),
                 ),
               ),
@@ -94,5 +112,20 @@ class ChatField extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _iconSubmit({
+    BuildContext context,
+    ChatController chatCtrl,
+  }) {
+    if (chatCtrl.isEmptyField()) {
+      return Icons.mic;
+    }
+
+    if (chatCtrl.soundRecorderStarted) {
+      return Icons.mic;
+    }
+
+    return Icons.send;
   }
 }

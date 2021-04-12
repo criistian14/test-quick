@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:testquick/app/presentation/pages/chat/local_widgets/chat_item.dart';
-import 'package:testquick/app/presentation/pages/chat/local_widgets/field_chat.dart';
+import 'package:testquick/app/presentation/pages/chat/local_widgets/chat_field.dart';
 
 import 'chat_controller.dart';
 import 'local_widgets/app_bar_chat.dart';

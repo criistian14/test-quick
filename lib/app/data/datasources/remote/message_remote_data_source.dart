@@ -152,6 +152,22 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
         });
       }
 
+      // If the message is a voice note
+      if (message.audioFile != null) {
+        final uploadTask = await firebaseStorage
+            .ref()
+            .child(
+              "/messages/audios/${DateTime.now().toUtc().toString()}-${message.audioFile.path.split("/").last}",
+            )
+            .putFile(message.audioFile);
+
+        await uploadTask.ref.getDownloadURL().then((fileURL) {
+          message = message.copyWith(
+            audio: fileURL,
+          );
+        });
+      }
+
       await conversation.update({
         "last_message": {
           ...message.toJson(),

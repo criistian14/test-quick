@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:testquick/app/core/usecases/usecase.dart';
 import 'package:testquick/app/core/utils/alerts.dart';
 import 'package:testquick/app/core/utils/modals.dart';
+import 'package:testquick/app/core/utils/time.dart';
 import 'package:testquick/app/data/models/message_model.dart';
 import 'package:testquick/app/data/models/user_model.dart';
 import 'package:testquick/app/domain/entities/form/custom_field_form.dart';
@@ -31,6 +33,11 @@ class ChatController extends GetxController {
 
   ImagePicker picker = ImagePicker();
 
+  FlutterSoundRecorder _soundRecorder = FlutterSoundRecorder();
+  bool _soundRecorderIsInited = false;
+  bool soundRecorderStarted = false;
+  Timer _timerSoundRecorder;
+
   ChatController({
     @required ListenMessages getMessages,
     @required StopListeningMessages stopListeningMessages,
@@ -41,6 +48,15 @@ class ChatController extends GetxController {
         _getMessages = getMessages,
         _stopListeningMessages = stopListeningMessages,
         _saveMessage = saveMessage;
+
+  @override
+  void onInit() async {
+    super.onInit();
+
+    // Initialize FlutterSoundRecorder
+    await _soundRecorder.openAudioSession();
+    _soundRecorderIsInited = true;
+  }
 
   @override
   void onReady() async {
@@ -86,6 +102,8 @@ class ChatController extends GetxController {
   }
 
   void sendText() async {
+    if (soundRecorderStarted) return;
+
     MessageModel message = MessageModel(
       message: messageText.value,
       idTo: contact.uid,
@@ -107,6 +125,41 @@ class ChatController extends GetxController {
 
     MessageModel message = MessageModel(
       pictureFile: File(pickedFile.path),
+      idTo: contact.uid,
+    );
+
+    _sendMessage(message);
+  }
+
+  void startRecordVoiceNote() async {
+    if (!_soundRecorderIsInited) return;
+
+    soundRecorderStarted = true;
+    messageFieldCtrl.text = TimeUtils().transformSecondsToTime(0);
+    update(["field"]);
+
+    _timerSoundRecorder = Timer.periodic(Duration(seconds: 1), (timer) {
+      messageFieldCtrl.text = TimeUtils().transformSecondsToTime(timer.tick);
+      update(["field"]);
+    });
+
+    await _soundRecorder.startRecorder(
+      toFile: "voice_note.acc",
+      codec: Codec.aacMP4,
+    );
+  }
+
+  void sendVoiceNote() async {
+    soundRecorderStarted = false;
+    _timerSoundRecorder?.cancel();
+    messageFieldCtrl.clear();
+    update(["field"]);
+
+    String pathAudio = await _soundRecorder.stopRecorder();
+    if (pathAudio.isEmpty) return;
+
+    MessageModel message = MessageModel(
+      audioFile: File(pathAudio),
       idTo: contact.uid,
     );
 
@@ -139,6 +192,8 @@ class ChatController extends GetxController {
   @override
   void onClose() async {
     await stopListeningMessages();
+    _soundRecorder.closeAudioSession();
+    _soundRecorder = null;
 
     super.onClose();
   }

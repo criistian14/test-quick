@@ -4,6 +4,13 @@
     <!--  Internet  -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--  Camera  -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--  Play & Record Audio  -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="TestQuick"
