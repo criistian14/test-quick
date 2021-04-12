@@ -30,6 +30,7 @@ class ChatController extends GetxController {
 
   CustomFieldForm messageText = CustomFieldForm.pure();
   TextEditingController messageFieldCtrl = TextEditingController();
+  FocusNode messageFocus = FocusNode();
 
   ImagePicker picker = ImagePicker();
 
@@ -37,6 +38,8 @@ class ChatController extends GetxController {
   bool _soundRecorderIsInited = false;
   bool soundRecorderStarted = false;
   Timer _timerSoundRecorder;
+
+  bool emojiShowing = false;
 
   ChatController({
     @required ListenMessages getMessages,
@@ -95,6 +98,33 @@ class ChatController extends GetxController {
   void changeMessage(String message) {
     this.messageText = CustomFieldForm.dirty(message);
     update(['field']);
+  }
+
+  void changeStateEmojiContainer() {
+    if (!emojiShowing) {
+      messageFocus.unfocus();
+      messageFocus.canRequestFocus = false;
+      emojiShowing = true;
+
+      //Enable the text field's focus node request after some delay
+      Future.delayed(Duration(milliseconds: 100), () {
+        messageFocus.canRequestFocus = true;
+      });
+    } else {
+      messageFocus.requestFocus();
+      emojiShowing = false;
+    }
+
+    update(["field"]);
+  }
+
+  void hiddenEmojiContainer() {
+    if (messageFocus.canRequestFocus) {
+      messageFocus.requestFocus();
+      emojiShowing = false;
+
+      update(["field"]);
+    }
   }
 
   bool isEmptyField() {

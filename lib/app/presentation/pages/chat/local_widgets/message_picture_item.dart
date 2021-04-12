@@ -16,6 +16,12 @@ class MessagePictureItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color colorLoading = Theme.of(context).accentColor;
+
+    if (isOwn) {
+      colorLoading = Theme.of(context).backgroundColor;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -33,7 +39,7 @@ class MessagePictureItem extends StatelessWidget {
                           loadingProgress.expectedTotalBytes
                       : null,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).backgroundColor,
+                    colorLoading,
                   ),
                 ),
               );

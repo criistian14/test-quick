@@ -46,6 +46,8 @@ dependencies:
   flutter_sound_lite: ^8.0.1+11
   # Request permissions and check their status
   permission_handler: ^6.1.1
+  # Provides an Emoji Keyboard widget
+  emoji_picker_flutter: ^1.0.3
 
 dev_dependencies:
   flutter_test:
