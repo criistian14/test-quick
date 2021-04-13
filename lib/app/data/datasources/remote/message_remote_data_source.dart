@@ -127,7 +127,7 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
         message: message,
         currentUserId: currentUser.uid,
       );
-      message.copyWith(
+      message = message.copyWith(
         idConversation: conversationId,
       );
 
