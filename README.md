@@ -14,9 +14,10 @@ Tambien tiene algunas utilidades como el manejo de temas, internacionalización,
 
 Y se maneja arquitectura limpia ya facilita futuras actualizacione y mantener mejor la app.
 
+
 # APK
 
-El apk es completamente funcional y se puede descargar de [aqui](https://github.com/criistian14/test-quick/tree/dev/assets)
+El apk es completamente funcional y se puede descargar de [aqui](https://github.com/criistian14/test-quick/raw/dev/apk/testquick_christian.apk) (esta en la carpeta apk de este repositorio)
 
 O si se desea se puede generar el apk, despues de descargar el repositorio localmente, con el siguiente comando:
 
