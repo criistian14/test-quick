@@ -6,6 +6,8 @@ Es un chat realizado en Firebase, con funcionalidades como:
 - Editar perfil
 - Chat en tiempo real con emoticones
 - Enviar audios (voice notes) e imagenes
+- Modo Dark
+- Multilenguaje (Español e Inglés)
 
 ---
 
