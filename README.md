@@ -27,6 +27,18 @@ O si se desea se puede generar el apk, despues de descargar el repositorio local
 flutter build apk
 ```
 
+# Usuarios de prueba
+
+Email   | Password 
+------ | --------
+user1@hotmail.com  | 123456
+user2@hotmail.com  | 123456
+user3@hotmail.com  | 123456
+user4@hotmail.com  | 123456
+
+
+
+
 # Recursos usados
 
 - El [icono](https://www.flaticon.com/free-icon/speak_1653630) es de Flaticon
