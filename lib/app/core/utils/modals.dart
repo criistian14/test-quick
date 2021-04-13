@@ -43,4 +43,43 @@ class ModalsUtils {
       ),
     ));
   }
+
+  static Future<Locale> pickLanguage() {
+    return Get.bottomSheet(Container(
+      height: 200,
+      color: Get.theme.backgroundColor,
+      padding: EdgeInsets.only(
+        top: 20,
+      ),
+      child: Column(
+        children: [
+          Text(
+            "pick_language".tr,
+            style: Get.textTheme.headline5,
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Material(
+            color: Get.theme.backgroundColor,
+            child: InkWell(
+              onTap: () => Get.back(result: Locale("es", "CO")),
+              child: ListTile(
+                title: Text("spanish".tr),
+              ),
+            ),
+          ),
+          Material(
+            color: Get.theme.backgroundColor,
+            child: InkWell(
+              onTap: () => Get.back(result: Locale("en", "US")),
+              child: ListTile(
+                title: Text("english".tr),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
 }

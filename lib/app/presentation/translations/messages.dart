@@ -6,6 +6,8 @@ class MessagesTranslations {
         "pick_source_image": "Escoge una imagen de",
         "voice_note": "Nota de voz",
         "permissions_must_enabled": "Tienes que habilitar los permisos",
+        "edit_profile_information": "Editar Informacion de Perfil",
+        "pick_language": "Escoge un lenguaje",
       };
 
   //
@@ -16,5 +18,7 @@ class MessagesTranslations {
         "pick_source_image": "Pick a image from",
         "voice_note": "Voice Note",
         "permissions_must_enabled": "You have to enable the permissions",
+        "edit_profile_information": "Edit Profile Information",
+        "pick_language": "Pick a image from",
       };
 }

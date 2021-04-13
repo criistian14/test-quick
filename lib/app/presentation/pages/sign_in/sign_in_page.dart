@@ -29,7 +29,7 @@ class SignInPage extends StatelessWidget {
                       "welcome".tr,
                       style: Theme.of(context).textTheme.headline1.copyWith(
                             height: 1.2,
-                            fontSize: 50.sp,
+                            fontSize: 40.sp,
                           ),
                     ),
                   ),

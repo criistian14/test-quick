@@ -9,6 +9,7 @@ class SettingsBinding extends Bindings {
     // Controllers
     Get.lazyPut<SettingsController>(() => SettingsController(
           signOut: sl(),
+          setTheme: sl(),
         ));
   }
 }

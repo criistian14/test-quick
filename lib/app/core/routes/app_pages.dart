@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:testquick/app/presentation/pages/chat/chat_binding.dart';
 import 'package:testquick/app/presentation/pages/chat/chat_page.dart';
+import 'package:testquick/app/presentation/pages/edit_profile/edit_profile_binding.dart';
+import 'package:testquick/app/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:testquick/app/presentation/pages/home/home_binding.dart';
 import 'package:testquick/app/presentation/pages/home/home_page.dart';
 import 'package:testquick/app/presentation/pages/sign_in/sign_in_binding.dart';
@@ -31,6 +33,11 @@ class AppPages {
       name: AppRoutes.CHAT,
       page: () => ChatPage(),
       binding: ChatBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.EDIT_PROFILE,
+      page: () => EditProfilePage(),
+      binding: EditProfileBinding(),
     ),
   ];
 }

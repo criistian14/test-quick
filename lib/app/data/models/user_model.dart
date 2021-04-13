@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:testquick/app/domain/entities/user.dart';
 
 class UserModel extends User {
+  final File avatarFile;
+
   UserModel({
     int id,
     String uid,
@@ -11,6 +15,7 @@ class UserModel extends User {
     String password,
     String avatar,
     bool verifiedEmail,
+    this.avatarFile,
   }) : super(
           id: id,
           uid: uid,
@@ -25,7 +30,6 @@ class UserModel extends User {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json["id"],
       uid: json["uid"],
       firstName: json["first_name"],
       lastName: json["last_name"],
@@ -38,13 +42,9 @@ class UserModel extends User {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-      "uid": uid,
-      "firstName": firstName,
-      "lastName": lastName,
-      "email": email,
-      "password": password,
-      "verifiedEmail": verifiedEmail,
+      "first_name": firstName,
+      "last_name": lastName,
+      "avatar": avatar,
     };
   }
 
@@ -58,6 +58,7 @@ class UserModel extends User {
     String password,
     bool verifiedEmail,
     String avatar,
+    File avatarFile,
   }) =>
       UserModel(
         id: id ?? this.id,
@@ -69,5 +70,6 @@ class UserModel extends User {
         password: password ?? this.password,
         avatar: avatar ?? this.avatar,
         verifiedEmail: verifiedEmail ?? this.verifiedEmail,
+        avatarFile: avatarFile ?? this.avatarFile,
       );
 }

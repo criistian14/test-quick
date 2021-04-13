@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:meta/meta.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:meta/meta.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/conversation_model.dart';
 import 'package:testquick/app/data/models/message_model.dart';
@@ -36,9 +36,9 @@ class MessageRemoteDataSourceImpl implements MessageRemoteDataSource {
   StreamSubscription<QuerySnapshot> _streamMessagesFirestore;
 
   MessageRemoteDataSourceImpl({
-    this.firebaseAuthProvider,
-    this.firebaseFirestore,
-    this.firebaseStorage,
+    @required this.firebaseAuthProvider,
+    @required this.firebaseFirestore,
+    @required this.firebaseStorage,
   });
 
   @override

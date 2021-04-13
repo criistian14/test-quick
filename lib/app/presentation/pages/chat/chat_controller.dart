@@ -32,7 +32,7 @@ class ChatController extends GetxController {
   TextEditingController messageFieldCtrl = TextEditingController();
   FocusNode messageFocus = FocusNode();
 
-  ImagePicker picker = ImagePicker();
+  ImagePicker imagePicker = ImagePicker();
 
   FlutterSoundRecorder _soundRecorder = FlutterSoundRecorder();
   bool _soundRecorderIsInited = false;
@@ -150,7 +150,7 @@ class ChatController extends GetxController {
     ImageSource source = await ModalsUtils.pickSourceImage();
     if (source == null) return;
 
-    final pickedFile = await picker.getImage(source: source);
+    final pickedFile = await imagePicker.getImage(source: source);
     if (pickedFile == null) return;
 
     MessageModel message = MessageModel(

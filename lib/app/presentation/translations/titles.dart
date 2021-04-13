@@ -10,6 +10,11 @@ class TitlesTranslations {
         "gallery": "Galeria",
         "camera": "Camara",
         "image": "Imagen",
+        "dark_mode": "Modo Oscuro",
+        "language": "Lenguaje",
+        "update": "Actualizar",
+        "spanish": "Español",
+        "english": "Ingles",
       };
 
   //
@@ -24,5 +29,10 @@ class TitlesTranslations {
         "gallery": "Gallery",
         "camera": "Camera",
         "image": "Image",
+        "dark_mode": "Dark Mode",
+        "language": "Language",
+        "update": "Update",
+        "spanish": "Spanish",
+        "english": "English",
       };
 }

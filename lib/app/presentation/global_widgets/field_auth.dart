@@ -9,6 +9,7 @@ class FieldAuth extends StatelessWidget {
   final Function(String) onChange;
   final bool error;
   final String errorText;
+  final TextEditingController controller;
 
   FieldAuth({
     Key key,
@@ -21,6 +22,7 @@ class FieldAuth extends StatelessWidget {
     this.onChange,
     this.error = false,
     this.errorText,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class FieldAuth extends StatelessWidget {
     return Container(
       margin: margin,
       child: TextFormField(
+        controller: controller,
         focusNode: fieldFocusNode,
         onChanged: onChange,
         onFieldSubmitted: (_) {
