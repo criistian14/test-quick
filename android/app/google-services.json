@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "776795941577",
+    "project_id": "test-quick-16808",
+    "storage_bucket": "test-quick-16808.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776795941577:android:b409d1e8312c709a7abb18",
+        "android_client_info": {
+          "package_name": "com.christian.testquick"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "776795941577-7re1mgso8lpt0p6cevvpfpr9c2a7k23d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5dH7s7i3eWdMPkVpL2shFHWpJjC--fiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "776795941577-7re1mgso8lpt0p6cevvpfpr9c2a7k23d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
