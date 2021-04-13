@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:testquick/app/data/models/message_model.dart';
 
-class MessageAudioItem extends StatelessWidget {
+class MessageAudioItem extends StatefulWidget {
   final MessageModel message;
   final bool isOwn;
 
@@ -16,6 +16,11 @@ class MessageAudioItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _MessageAudioItemState createState() => _MessageAudioItemState();
+}
+
+class _MessageAudioItemState extends State<MessageAudioItem> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -25,9 +30,11 @@ class MessageAudioItem extends StatelessWidget {
           child: SoundPlayerUI.fromLoader(
             (context) async {
               Track track = Track(
-                trackPath: message.audio,
+                trackPath: widget.message.audio,
                 codec: Codec.aacMP4,
               );
+
+              print(track.trackPath);
 
               return track;
             },
@@ -42,9 +49,9 @@ class MessageAudioItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              Jiffy(message.createdAt).format("h:mm a"),
+              Jiffy(widget.message.createdAt).format("h:mm a"),
               style: TextStyle(
-                color: isOwn ? Colors.white : Colors.black,
+                color: widget.isOwn ? Colors.white : Colors.black,
                 letterSpacing: 0.3,
                 fontSize: 12.sp,
               ),
@@ -52,12 +59,13 @@ class MessageAudioItem extends StatelessWidget {
             SizedBox(
               width: 4.w,
             ),
-            if (isOwn)
+            if (widget.isOwn)
               SvgPicture.asset(
                 "assets/icons/double-check.svg",
                 height: 17.h,
-                color:
-                    message.read ? Colors.white : Theme.of(context).shadowColor,
+                color: widget.message.read
+                    ? Colors.white
+                    : Theme.of(context).shadowColor,
               ),
           ],
         ),
