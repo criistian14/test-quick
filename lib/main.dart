@@ -47,10 +47,6 @@ class MyApp extends StatelessWidget {
         defaultTransition: Transition.cupertino,
         popGesture: true,
         translations: AppTranslations(),
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('es', 'CO'),
-        ],
       ),
     );
   }

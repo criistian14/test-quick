@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:get/get.dart';
+import 'package:meta/meta.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/conversation_model.dart';
 import 'package:testquick/app/data/models/user_model.dart';
@@ -27,8 +28,8 @@ class ConversationRemoteDataSourceImpl implements ConversationRemoteDataSource {
   StreamSubscription<QuerySnapshot> _streamConversationsFirestore;
 
   ConversationRemoteDataSourceImpl({
-    this.firebaseAuthProvider,
-    this.firebaseFirestore,
+    @required this.firebaseAuthProvider,
+    @required this.firebaseFirestore,
   });
 
   @override

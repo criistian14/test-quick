@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:get/get.dart';
+import 'package:meta/meta.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/user_model.dart';
 
@@ -26,8 +27,8 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
   StreamSubscription<QuerySnapshot> _streamContactsFirestore;
 
   ContactRemoteDataSourceImpl({
-    this.firebaseAuthProvider,
-    this.firebaseFirestore,
+    @required this.firebaseAuthProvider,
+    @required this.firebaseFirestore,
   });
 
   @override

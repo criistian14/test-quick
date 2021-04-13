@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, UserCredential, FirebaseAuthException;
 import 'package:get/get.dart';
+import 'package:meta/meta.dart';
 import 'package:testquick/app/core/errors/exceptions.dart';
 import 'package:testquick/app/data/models/user_model.dart';
 
@@ -27,8 +28,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
 
   AuthRemoteDataSourceImpl({
-    this.firebaseAuthProvider,
-    this.firebaseFirestore,
+    @required this.firebaseAuthProvider,
+    @required this.firebaseFirestore,
   });
 
   @override
